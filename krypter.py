@@ -309,18 +309,21 @@ class Signature_Screen(Frame):
         privateKeyFileName = Label(master=fileLoadFrame, textvariable=privateKeyFnStr, width=30)
         privateKeyFileName.grid(row=0, column=1, pady=10, padx=10)
 
+        publicKeyLoadBtn = Button(master=fileLoadFrame, width=25, text="Ucitaj privatni ključ")
+        publicKeyLoadBtn.grid(row=0, column=3, pady=10, padx=10)
+
         generateKeysBtn = Button(master=fileLoadFrame, text="Generiraj ključeve")
-        generateKeysBtn.grid(row=2, column=1, columnspan=2, sticky=W+E, padx=10, pady=10)
+        generateKeysBtn.grid(row=1, column=1, columnspan=2, sticky=W+E, padx=10, pady=10)
 
         dataLabel = Label(master=fileLoadFrame, text="Podaci: ")
-        dataLabel.grid(row=3, column=0, pady=10, padx=10, sticky=W)
+        dataLabel.grid(row=2, column=0, pady=10, padx=10, sticky=W)
 
         dataStr = StringVar()
         dataFileName = Label(master=fileLoadFrame, textvariable=dataStr, width=30)
-        dataFileName.grid(row=3, column=1, pady=10, padx=10)
+        dataFileName.grid(row=2, column=1, pady=10, padx=10)
 
         dataLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj podatke")
-        dataLoadBtn.grid(row=3, column=3, pady=10, padx=10)
+        dataLoadBtn.grid(row=2, column=3, pady=10, padx=10)
 
         # showDataFrame
         showDataFrame = Frame(master=signFrame)
