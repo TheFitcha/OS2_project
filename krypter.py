@@ -17,6 +17,7 @@ class MainWindow(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, *kwargs)
 
+        self.title("Krypter")
         self.resizable(False, False)
         self.title_font = font.Font(family="Helvetica", size=12, weight="bold")
 
@@ -48,7 +49,7 @@ class MainWindow(Tk):
 
         self.frames = {}
         for frame in (AES_view.AES_Screen, RSA_view.RSA_Screen, hash_view.Hash_Screen, signature_view.Signature_Screen):
-            self.frames[frame.__name__] = frame(parent=container, controller=self)
+            self.frames[frame.__name__] = frame(parent=container, controller=ctr.Controller(frame))
             self.frames[frame.__name__].grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("AES_Screen")

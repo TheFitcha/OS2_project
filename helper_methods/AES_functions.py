@@ -1,35 +1,41 @@
 import pyaes, pbkdf2, binascii, os, secrets # AES
+from Cryptodome.Random import get_random_bytes
+from Cryptodome.Cipher import AES
 
 # AES
 # returns AES key and salt
-def aes_derive_key(password, salt=None) -> tuple[str, str]:  
+def aes_derive_key(password, salt=None, generateSalt=False) -> str: 
 
-    if not salt: # generate random salt if not provided
-        salt = os.urandom(16) # random salt (128-bit)
+    # if not salt and generateSalt: # generate random salt if not provided
+    #     salt = os.urandom(16) # random salt (128-bit)
+    #     key = pbkdf2.PBKDF2(password, salt).read(32) # derives 256-bit key via PBKDF2 algorithm
+    # else:
+    #     key = pbkdf2.PBKDF2(password, '').read(32)
 
+    salt = os.urandom(16) # random salt (128-bit)
     key = pbkdf2.PBKDF2(password, salt).read(32) # derives 256-bit key via PBKDF2 algorithm
+    
     aes_encryption_key = binascii.hexlify(key) # binary data -> hex
 
-    return (aes_encryption_key, salt)
+    return aes_encryption_key
 
 # returns encrypted data, key and salt
-def aes_encrypt(data, password, mode="CTR") -> tuple[str, str, str]: 
-    initialization_vector = secrets.randbits(256)
+def aes_encrypt(data, key, mode="CTR") -> str: 
+    # initialization_vector = secrets.randbits(256)
     
-    encryption_key, salt = aes_derive_key(password)
+    #encryption_key, salt = aes_derive_key(password)
 
+    encryption_key = key.encode('utf-8')
     if mode == "CTR":
-        aes = pyaes.AESModeOfOperationCTR(encryption_key, pyaes.Counter(initialization_vector))
+        aes = pyaes.AESModeOfOperationCTR(encryption_key)
     
     cipher = aes.encrypt(data)
-    return (binascii.hexlify(cipher), encryption_key, salt)
+    return binascii.hexlify(cipher)
 
 # returns decrpyted data only
-def aes_decrypt(cipher, password, salt, init_vector, mode="CTR") -> str:  
-    key, salt = aes_derive_key(password, salt)
-
+def aes_decrypt(cipher, key, salt=None, init_vector=None, mode="CTR") -> str:  
     if mode == "CTR":
-        aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(init_vector))
+        aes = pyaes.AESModeOfOperationCTR(key)
 
     decrypted_data = aes.decrypt(cipher)
     return decrypted_data
