@@ -119,7 +119,7 @@ class AES_Screen(Frame):
         dialog.destroy()
 
     def show_aes_result(result):
-        resultDisplayTxtBox.replace(1.0, END)
+        resultDisplayTxtBox.delete(1.0, END)
         resultDisplayTxtBox.insert(END, result)
 
 

@@ -4,7 +4,7 @@ from tkinter.ttk import *
 class RSA_Screen(Frame):
     def __init__(self, parent, controller) -> None:
         Frame.__init__(self, parent)
-        self.controller = controller
+        self.ctr = controller
 
         # fileLoadFrame
         fileLoadFrame = Frame(master=self)
@@ -13,34 +13,37 @@ class RSA_Screen(Frame):
         publicKeyLabel = Label(fileLoadFrame, text="Javni ključ: ")
         publicKeyLabel.grid(row=0, column=0, pady=10, padx=10)
 
+        global publicKeyFnStr
         publicKeyFnStr = StringVar()
         publicKeyFileName = Label(master=fileLoadFrame, textvariable=publicKeyFnStr, width=30)
         publicKeyFileName.grid(row=0, column=1, pady=10, padx=10)
 
-        publicKeyLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj javni ključ")
+        publicKeyLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj javni ključ", command=lambda: self.ctr.load_file('key', 'RSA_public'))
         publicKeyLoadBtn.grid(row=0, column=3, pady=10, padx=10)
 
         privateKeyLabel = Label(master=fileLoadFrame, text="Tajni ključ: ")
         privateKeyLabel.grid(row=1, column=0, pady=10, padx=10)
 
+        global privateKeyFnStr
         privateKeyFnStr = StringVar()
         privateKeyFileName = Label(master=fileLoadFrame, textvariable=privateKeyFnStr, width=30)
         privateKeyFileName.grid(row=1, column=1, pady=10, padx=10)
 
-        privateKeyLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj tajni ključ")
+        privateKeyLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj tajni ključ", command=lambda: self.ctr.load_file('key', 'RSA_private'))
         privateKeyLoadBtn.grid(row=1, column=3, pady=10, padx=10)
         
-        generateKeysBtn = Button(master=fileLoadFrame, text="Generiraj ključeve")
+        generateKeysBtn = Button(master=fileLoadFrame, text="Generiraj ključeve", command=lambda: self.ctr.generate_RSA_key())
         generateKeysBtn.grid(row=2, column=1, columnspan=2, sticky=W+E, padx=10, pady=10)
 
         dataLabel = Label(master=fileLoadFrame, text="Podaci: ")
         dataLabel.grid(row=3, column=0, pady=10, padx=10)
 
+        global dataStr
         dataStr = StringVar()
         dataFileName = Label(master=fileLoadFrame, textvariable=dataStr, width=30)
         dataFileName.grid(row=3, column=1, pady=10, padx=10)
 
-        dataLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj podatke")
+        dataLoadBtn = Button(master=fileLoadFrame, width=15, text="Ucitaj podatke", command=lambda: self.ctr.load_file('data', 'RSA'))
         dataLoadBtn.grid(row=3, column=3, pady=10, padx=10)
 
         # showDataFrame
@@ -50,6 +53,7 @@ class RSA_Screen(Frame):
         privateKeyDisplayName = Label(master=showDataFrame, text="Privatni ključ: ", width=15)
         privateKeyDisplayName.grid(row=0, column=0, pady=10, padx=10)
 
+        global privateKeyValueStr
         privateKeyValueStr = StringVar(value="Example")
         privateKeyDisplayEntry = Entry(master=showDataFrame, state=DISABLED, textvariable=privateKeyValueStr)
         privateKeyDisplayEntry.grid(row=0, column=1, columnspan=3, sticky=W+E)
@@ -57,6 +61,7 @@ class RSA_Screen(Frame):
         publicKeyDisplayName = Label(master=showDataFrame, text="Javni ključ: ", width=15)
         publicKeyDisplayName.grid(row=1, column=0, pady=10, padx=10)
 
+        global publicKeyValueStr
         publicKeyValueStr = StringVar(value="Example")
         publicKeyDisplayEntry = Entry(master=showDataFrame, state=DISABLED, textvariable=publicKeyValueStr)
         publicKeyDisplayEntry.grid(row=1, column=1, columnspan=3, sticky=W+E)
@@ -64,19 +69,18 @@ class RSA_Screen(Frame):
         dataDisplayLabel = Label(master=showDataFrame, text="Podaci: ", width=15)
         dataDisplayLabel.grid(row=2, column=0, pady=10, padx=10)
 
-        dataDisplayStr = StringVar(value="Example")
+        global dataDisplayTxtBox
         dataDisplayTxtBox = Text(master=showDataFrame, height=10, width=50)
-        dataDisplayTxtBox.insert(END, dataDisplayStr)
         dataDisplayTxtBox.grid(row=2, column=1)
 
         # cryptButtonsFrame
         cryptButtonsFrame = Frame(master=self)
         cryptButtonsFrame.pack(pady=10, padx=10)
 
-        encryptBtn = Button(master=cryptButtonsFrame, text="Enkriptiraj", width=20)
+        encryptBtn = Button(master=cryptButtonsFrame, text="Enkriptiraj", width=20, command=lambda: self.ctr.RSA_encrypt())
         encryptBtn.grid(row=0, column=0, pady=10, sticky=E)
 
-        decryptBtn = Button(master=cryptButtonsFrame, text="Dekriptiraj", width=20)
+        decryptBtn = Button(master=cryptButtonsFrame, text="Dekriptiraj", width=20, command=lambda: self.ctr.RSA_decrypt())
         decryptBtn.grid(row=0, column=1, pady=10, padx=2, sticky=E)
 
         # cryptResultFrame
@@ -86,8 +90,49 @@ class RSA_Screen(Frame):
         resultDisplayLabel = Label(master=cryptResultFrame, text="Rezultat: ", width=15)
         resultDisplayLabel.grid(row=1, column=0, pady=10, padx=2)
 
-        resultDisplayStr = StringVar(value="Example")
+        global resultDisplayTxtBox
         resultDisplayTxtBox = Text(master=cryptResultFrame, height=10, width=50)
-        resultDisplayTxtBox.insert(END, resultDisplayStr)
         resultDisplayTxtBox.grid(row=1, column=1)
+
+    def show_data(which, filename, value):
+        if which == 'key_public':
+            publicKeyFnStr.set(filename)
+            publicKeyValueStr.set(value)
+        elif which == 'key_private':
+            privateKeyFnStr.set(filename)
+            privateKeyValueStr.set(value)
+        elif which == 'data':
+            dataStr.set(filename)
+            dataDisplayTxtBox.delete(1.0, END)
+            dataDisplayTxtBox.insert(END, value)
+            
+    # def generate_key_dialog(self):
+    #     dialog = Toplevel(master=self)
+
+    #     passEntryLabel = Label(master=dialog, text='Lozinka: ') 
+    #     pass_entry = Entry(master=dialog, width=50)
+    #     passEntryLabel.grid(row=0, column=0, pady=10, padx=10)
+    #     pass_entry.grid(row=0, column=1, pady=5)
+
+    #     # saltEntryLabel = Label(master=dialog, text='Sol: ')
+    #     # saltEntry = Entry(master=dialog, width=50)
+    #     # saltEntry.grid(row=1, column=1, padx=5)
+    #     # saltEntryLabel.grid(row=1, column=0, padx=10, pady=10)
+
+    #     okBtn = Button(master=dialog, width=20, text='OK', command=lambda: self.generate_key_send(dialog, pass_entry.get()))
+    #     cancelBtn = Button(master=dialog, width=20, text='Odustani', command=lambda: self.dispose_key_dialog(dialog))
+    #     okBtn.grid(row=2, column=3)
+    #     cancelBtn.grid(row=2, column=4)
+
+
+    # def generate_key_send(self, dialog, password):
+    #     self.dispose_key_dialog(dialog)
+    #     self.ctr.generate_AES_key(password)
+
+    # def dispose_key_dialog(self, dialog):
+    #     dialog.destroy()
+
+    def show_rsa_result(result):
+        resultDisplayTxtBox.delete(1.0, END)
+        resultDisplayTxtBox.insert(END, result)
  
