@@ -40,10 +40,10 @@ from Cryptodome.Cipher import AES
 #     decrypted_data = aes.decrypt(cipher)
 #     return decrypted_data
 
-def aes_derive_key() -> str:
-    return get_random_bytes(16).decode('utf-8')
+def aes_derive_key() -> bytes:
+    return get_random_bytes(16)
 
-def aes_encrypt(data, key, mode="CTR") -> tuple:
-    cipher = AES.new(key, AES.MODE_CTR)
+def aes_encrypt(data, key, mode="CBC") -> tuple:
+    cipher = AES.new(key, AES.MODE_CBC)
     encrypted_bytes = cipher.encrypt(data)
     # nonce?

@@ -10,6 +10,18 @@ loaded_keys = {
     'RSA_private': {
         'filename': '',
         'key': ''
+    },
+    'SIGNATURE_private': {
+        'filename': '',
+        'key': ''
+    },
+    'SIGNATURE_public': {
+        'filename': '',
+        'key': ''
+    },
+    'SIGNATURE_sign': {
+        'filename': '',
+        'key': ''
     }
 }
 
