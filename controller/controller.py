@@ -57,7 +57,7 @@ class Controller:
     #region AES
     def generate_AES_key(self):
         key = aes_f.aes_derive_key()
-        fileKey = fd.asksaveasfile(mode='w', defaultextension='.txt')
+        fileKey = fd.asksaveasfile(mode='w', defaultextension='.txt', initialfile="AES_key.txt")
 
         if fileKey is None:
             return
@@ -91,7 +91,7 @@ class Controller:
     #region RSA
     def generate_RSA_key(self):
         private_key, public_key = rsa_f.generate_rsa_keys()
-        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt')
+        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt', initialfile="RSA_private_key.txt")
 
         if fileKey is None:
             return
@@ -99,7 +99,7 @@ class Controller:
         fileKey.write(private_key.decode('utf-8'))
         fileKey.close()
 
-        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt')
+        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt', initialfile="RSA_public_key.txt")
 
         if fileKey is None:
             return
@@ -149,7 +149,7 @@ class Controller:
     #region SIGNATURE
     def generate_sign_keys(self):
         private_key, public_key = sign_f.create_key()
-        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt')
+        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt', initialfile="signature_private_key.txt")
 
         if fileKey is None:
             return
@@ -157,7 +157,7 @@ class Controller:
         fileKey.write(private_key.decode('latin-1'))
         fileKey.close()
 
-        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt')
+        fileKey = fd.asksaveasfile(mode='w+', defaultextension='.txt', initialfile="signature_public_key")
 
         if fileKey is None:
             return

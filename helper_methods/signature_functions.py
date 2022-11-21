@@ -1,4 +1,5 @@
 from ecdsa import SigningKey, VerifyingKey
+import binascii
 
 def create_key() -> tuple[bytes, bytes]:
     priv_k = SigningKey.generate()
@@ -7,8 +8,12 @@ def create_key() -> tuple[bytes, bytes]:
 
 def sign(data, private_key) -> str:
     signing_key = SigningKey.from_pem(private_key)
-    return signing_key.sign(data.encode('utf-8')).hex()
+    signed = signing_key.sign(data.encode('utf-8'))
+    return binascii.hexlify(signed).decode()
 
 def check(data, public_key, signature) -> bool:
     verifying_key = VerifyingKey.from_pem(public_key)
-    return verifying_key.verify(bytes.fromhex(signature), data)
+    try:
+        return verifying_key.verify(binascii.unhexlify(signature), data.encode('utf-8'))
+    except Exception:
+        return False

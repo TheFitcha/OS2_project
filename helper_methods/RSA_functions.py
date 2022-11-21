@@ -14,11 +14,11 @@ def encrypt_data(data, key) -> str:
     key_pair = RSA.import_key(key)  # this 'key' includes private key (?)
     rsa_encryptor = PKCS1_OAEP.new(key_pair)  # RsaKey as argument
     encrypted = rsa_encryptor.encrypt(data.encode('utf-8'))
-    return binascii.hexlify(encrypted)
+    return binascii.hexlify(encrypted).decode()
 
 # returns decrypted data
 def decrypt_data(data, key) -> str:
     key_pair = RSA.import_key(key)
     rsa_decryptor = PKCS1_OAEP.new(key_pair)
-    decrypted = rsa_decryptor.decrypt(data.encode('utf-8'))
+    decrypted = rsa_decryptor.decrypt(binascii.unhexlify(data))
     return decrypted
