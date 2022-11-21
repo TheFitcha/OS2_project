@@ -62,7 +62,7 @@ class Controller:
         if fileKey is None:
             return
 
-        fileKey.write(key.decode('latin-1'))
+        fileKey.write(key)
         fileKey.close()
 
         
@@ -73,7 +73,7 @@ class Controller:
         if models.loaded_data['AES']['value'] == '':
             raise ValueError("Data for encryption not loaded!")
         
-        encrypted_data = aes_f.aes_encrypt(models.loaded_data['AES']['value'], models.loaded_keys['AES']['key'], mode)
+        encrypted_data = aes_f.encrypt_data(models.loaded_data['AES']['value'], models.loaded_keys['AES']['key'])
         self.view.show_aes_result(encrypted_data)
 
     def AES_decrypt(self):
@@ -83,7 +83,7 @@ class Controller:
         if models.loaded_data['AES']['value'] == '':
             raise ValueError("Data for decryption not loaded!")
 
-        decrypted_data = aes_f.aes_decrypt(models.loaded_data['AES']['value'], models.loaded_keys['AES']['key'])
+        decrypted_data = aes_f.decrypt_data(models.loaded_data['AES']['value'], models.loaded_keys['AES']['key'])
         self.view.show_aes_result(decrypted_data)
 
     #endregion

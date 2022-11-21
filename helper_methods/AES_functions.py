@@ -1,49 +1,20 @@
-import pyaes, pbkdf2, binascii, os, secrets # AES
 from Cryptodome.Random import get_random_bytes
 from Cryptodome.Cipher import AES
+from Cryptodome.Util.Padding import pad, unpad
+from base64 import b64encode, b64decode
 
-# # AES
-# # returns AES key and salt
-# def aes_derive_key(password, salt=None, generateSalt=False) -> str: 
+I_VECTOR = b"a"*16
 
-#     # if not salt and generateSalt: # generate random salt if not provided
-#     #     salt = os.urandom(16) # random salt (128-bit)
-#     #     key = pbkdf2.PBKDF2(password, salt).read(32) # derives 256-bit key via PBKDF2 algorithm
-#     # else:
-#     #     key = pbkdf2.PBKDF2(password, '').read(32)
+def aes_derive_key() -> str:
+    return b64encode(get_random_bytes(16)).decode('utf-8')
 
-#     salt = os.urandom(16) # random salt (128-bit)
-#     key = pbkdf2.PBKDF2(password, salt).read(32) # derives 256-bit key via PBKDF2 algorithm
-    
-#     aes_encryption_key = binascii.hexlify(key) # binary data -> hex
+def encrypt_data(data, key, mode="CBC") -> str:
+    cipher = AES.new(b64decode(key), AES.MODE_CBC, iv=I_VECTOR)
+    cipher_bytes = cipher.encrypt(pad(data.encode('utf-8'), AES.block_size))
+    cipher_decoded = b64encode(cipher_bytes).decode('utf-8')
+    return cipher_decoded
 
-#     return aes_encryption_key
-
-# # returns encrypted data, key and salt
-# def aes_encrypt(data, key, mode="CTR") -> str: 
-#     # initialization_vector = secrets.randbits(256)
-    
-#     #encryption_key, salt = aes_derive_key(password)
-
-#     encryption_key = key.encode('utf-8')
-#     if mode == "CTR":
-#         aes = pyaes.AESModeOfOperationCTR(encryption_key)
-    
-#     cipher = aes.encrypt(data)
-#     return binascii.hexlify(cipher)
-
-# # returns decrpyted data only
-# def aes_decrypt(cipher, key, salt=None, init_vector=None, mode="CTR") -> str:  
-#     if mode == "CTR":
-#         aes = pyaes.AESModeOfOperationCTR(key)
-
-#     decrypted_data = aes.decrypt(cipher)
-#     return decrypted_data
-
-def aes_derive_key() -> bytes:
-    return get_random_bytes(16)
-
-def aes_encrypt(data, key, mode="CBC") -> tuple:
-    cipher = AES.new(key, AES.MODE_CBC)
-    encrypted_bytes = cipher.encrypt(data)
-    # nonce?
+def decrypt_data(data, key, mode="CBC") -> str:
+    cipher = AES.new(b64decode(key), AES.MODE_CBC, iv=I_VECTOR)
+    decrypted = unpad(cipher.decrypt(b64decode(data)), AES.block_size)
+    return decrypted

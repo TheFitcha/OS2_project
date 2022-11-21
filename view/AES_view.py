@@ -89,38 +89,16 @@ class AES_Screen(Frame):
             keyValueStr.set(value)
         elif which == 'data':
             dataStr.set(filename)
+            dataDisplayTxtBox.config(state=NORMAL)
             dataDisplayTxtBox.delete(1.0, END)
             dataDisplayTxtBox.insert(END, value)
-            
-    # def generate_key_dialog(self):
-    #     dialog = Toplevel(master=self)
-
-    #     passEntryLabel = Label(master=dialog, text='Lozinka: ') 
-    #     pass_entry = Entry(master=dialog, width=50)
-    #     passEntryLabel.grid(row=0, column=0, pady=10, padx=10)
-    #     pass_entry.grid(row=0, column=1, pady=5)
-
-    #     # saltEntryLabel = Label(master=dialog, text='Sol: ')
-    #     # saltEntry = Entry(master=dialog, width=50)
-    #     # saltEntry.grid(row=1, column=1, padx=5)
-    #     # saltEntryLabel.grid(row=1, column=0, padx=10, pady=10)
-
-    #     okBtn = Button(master=dialog, width=20, text='OK', command=lambda: self.generate_key_send(dialog, pass_entry.get()))
-    #     cancelBtn = Button(master=dialog, width=20, text='Odustani', command=lambda: self.dispose_key_dialog(dialog))
-    #     okBtn.grid(row=2, column=3)
-    #     cancelBtn.grid(row=2, column=4)
-
-
-    # def generate_key_send(self, dialog, password):
-    #     self.dispose_key_dialog(dialog)
-    #     self.ctr.generate_AES_key(password)
-
-    # def dispose_key_dialog(self, dialog):
-    #     dialog.destroy()
-
+            dataDisplayTxtBox.config(state=DISABLED)
+        
     def show_aes_result(result):
+        resultDisplayTxtBox.config(state=NORMAL)
         resultDisplayTxtBox.delete(1.0, END)
         resultDisplayTxtBox.insert(END, result)
+        resultDisplayTxtBox.config(state=DISABLED)
 
 
 
