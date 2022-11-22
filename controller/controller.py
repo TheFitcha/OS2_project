@@ -111,10 +111,7 @@ class Controller:
     def RSA_encrypt(self):
         if models.loaded_keys['RSA_public']['filename'] == '':
             raise ValueError("Public key for RSA not loaded!")
-
-        # if models.loaded_keys['RSA_private']['key'] == '':
-        #     raise ValueError("Private key for RSA not loaded!")
-            
+    
         if models.loaded_data['RSA']['filename'] == '':
             raise ValueError("Data for decryption not loaded!")
 
@@ -122,9 +119,6 @@ class Controller:
         self.view.show_rsa_result(encrypted)
 
     def RSA_decrypt(self):
-        # if models.loaded_keys['RSA_public']['key'] == '':
-        #     raise ValueError("Public key for RSA not loaded!")
-
         if models.loaded_keys['RSA_private']['filename'] == '':
             raise ValueError("Private key for RSA not loaded!")
             

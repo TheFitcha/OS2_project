@@ -9,10 +9,6 @@ WINDOW_HEIGHT = 350
 WINDOW_WIDTH = 500
 MAIN_COLOR = "aliceblue"
 
-# style setup
-# frameMainStyle = Style()
-# frameMainStyle.configure('Main.TFrame', background='red')
-
 class MainWindow(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, *kwargs)
