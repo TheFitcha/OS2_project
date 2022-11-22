@@ -54,7 +54,7 @@ class RSA_Screen(Frame):
         privateKeyDisplayName.grid(row=0, column=0, pady=10, padx=10)
 
         global privateKeyValueStr
-        privateKeyValueStr = StringVar(value="Example")
+        privateKeyValueStr = StringVar()
         privateKeyDisplayEntry = Entry(master=showDataFrame, state=DISABLED, textvariable=privateKeyValueStr)
         privateKeyDisplayEntry.grid(row=0, column=1, columnspan=3, sticky=W+E)
 
@@ -62,7 +62,7 @@ class RSA_Screen(Frame):
         publicKeyDisplayName.grid(row=1, column=0, pady=10, padx=10)
 
         global publicKeyValueStr
-        publicKeyValueStr = StringVar(value="Example")
+        publicKeyValueStr = StringVar()
         publicKeyDisplayEntry = Entry(master=showDataFrame, state=DISABLED, textvariable=publicKeyValueStr)
         publicKeyDisplayEntry.grid(row=1, column=1, columnspan=3, sticky=W+E)
 

@@ -50,7 +50,7 @@ class AES_Screen(Frame):
         keyDisplayLabel.grid(row=0, column=0, pady=10, padx=10)
 
         global keyValueStr
-        keyValueStr = StringVar(value="Example")
+        keyValueStr = StringVar()
 
         keyDisplayEntry = Entry(master=showDataFrame, state=DISABLED, textvariable=keyValueStr)
         keyDisplayEntry.grid(row=0, column=1, columnspan=3, sticky=W+E)
